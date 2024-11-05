@@ -57,7 +57,7 @@ php artisan key:generate
 
 7. **Install and build the frontend dependencies**:
 ```
-cd project-folder/public/vue folder
+cd project-folder/public/vue
 ```
 
 - Using npm
