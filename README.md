@@ -13,7 +13,7 @@ This project is built using Laravel, a popular PHP web application framework, an
 
 1. **Clone the repository**:
 ```
-git clone https://gitlab.com/appetiser/appetiser-pre-hire-coding-challenge/11062024-zoren-lumosbog-web.git
+git clone https://github.com/zorenleolumosbog/laravel-vue-crud-tasks
 cd project-folder
 ```
 
