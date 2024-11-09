@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Task;
-use App\Http\Requests\TaskRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Models\Task;
 use App\Services\TaskService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -16,20 +16,20 @@ class TaskController extends Controller
 {
     public function __construct(
         private TaskService $taskService
-    ){}
+    ) {}
 
     public function index(Request $request)
     {
         $tasks = QueryBuilder::for($request->user()->tasks())
-                    ->defaultSort('-created_at')
-                    ->allowedSorts(['title', 'description', 'due_date', 'order', 'completed_at', 'archived_at', 'created_at'])
-                    ->allowedFilters([
-                        'priority',
-                        AllowedFilter::scope('search'),
-                    ])
-                    ->with(['attachments', 'tags'])
-                    ->filter($request->all())
-                    ->paginate($request->limit ?? 10);
+            ->defaultSort('-created_at')
+            ->allowedSorts(['title', 'description', 'due_date', 'order', 'completed_at', 'archived_at', 'created_at'])
+            ->allowedFilters([
+                'priority',
+                AllowedFilter::scope('search'),
+            ])
+            ->with(['attachments', 'tags'])
+            ->filter($request->all())
+            ->paginate($request->limit ?? 10);
 
         return TaskResource::collection($tasks);
     }
@@ -122,58 +122,58 @@ class TaskController extends Controller
         $user = auth()->user();
 
         return response()->json([
-                    [
-                        'label' => 'Default',
-                        'sort' => '-created_at'
-                    ],
-                    [
-                        'label' => 'Title - Asc',
-                        'sort' => 'title'
-                    ],
-                    [
-                        'label' => 'Title - Desc',
-                        'sort' => '-title'
-                    ],
-                    [
-                        'label' => 'Description - Asc',
-                        'sort' => 'description'
-                    ],
-                    [
-                        'label' => 'Description - Desc',
-                        'sort' => '-description'
-                    ],
-                    [
-                        'label' => 'Due Date - Asc',
-                        'sort' => 'due_date'
-                    ],
-                    [
-                        'label' => 'Due Date - Desc',
-                        'sort' => '-due_date'
-                    ],
-                    [
-                        'label' => 'Created Date - Asc',
-                        'sort' => 'created_at'
-                    ],
-                    [
-                        'label' => 'Created Date - Desc',
-                        'sort' => '-created_at'
-                    ],
-                    [
-                        'label' => 'Completed Date - Asc',
-                        'sort' => 'completed_at'
-                    ],
-                    [
-                        'label' => 'Completed Date - Desc',
-                        'sort' => '-completed_at'
-                    ],
-                    [
-                        'label' => 'Priority - Asc',
-                        'sort' => 'order'
-                    ],
-                    [
-                        'label' => 'Priority - Desc',
-                        'sort' => '-order'
-                    ],
-                ]);
+            [
+                'label' => 'Default',
+                'sort' => '-created_at',
+            ],
+            [
+                'label' => 'Title - Asc',
+                'sort' => 'title',
+            ],
+            [
+                'label' => 'Title - Desc',
+                'sort' => '-title',
+            ],
+            [
+                'label' => 'Description - Asc',
+                'sort' => 'description',
+            ],
+            [
+                'label' => 'Description - Desc',
+                'sort' => '-description',
+            ],
+            [
+                'label' => 'Due Date - Asc',
+                'sort' => 'due_date',
+            ],
+            [
+                'label' => 'Due Date - Desc',
+                'sort' => '-due_date',
+            ],
+            [
+                'label' => 'Created Date - Asc',
+                'sort' => 'created_at',
+            ],
+            [
+                'label' => 'Created Date - Desc',
+                'sort' => '-created_at',
+            ],
+            [
+                'label' => 'Completed Date - Asc',
+                'sort' => 'completed_at',
+            ],
+            [
+                'label' => 'Completed Date - Desc',
+                'sort' => '-completed_at',
+            ],
+            [
+                'label' => 'Priority - Asc',
+                'sort' => 'order',
+            ],
+            [
+                'label' => 'Priority - Desc',
+                'sort' => '-order',
+            ],
+        ]);
     }
 }

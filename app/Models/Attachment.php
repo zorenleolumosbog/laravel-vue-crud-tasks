@@ -11,7 +11,7 @@ class Attachment extends Model
         'filename',
         'original_filename',
         'mime_type',
-        'path'
+        'path',
     ];
 
     protected $appends = ['url'];

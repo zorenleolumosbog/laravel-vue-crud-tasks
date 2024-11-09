@@ -13,6 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('tasks/count/statuses', [TaskController::class, 'getCountByStatuses']);
     Route::get('tasks/sort/options', [TaskController::class, 'getSortOptions']);
-    
+
     Route::get('tags', [TagController::class, 'index']);
 });

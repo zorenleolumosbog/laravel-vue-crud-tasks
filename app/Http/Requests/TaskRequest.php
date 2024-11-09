@@ -28,7 +28,7 @@ class TaskRequest extends FormRequest
             'priority' => 'nullable|in:Urgent,High,Normal,Low',
             'attachments.*' => 'nullable|file|mimes:svg,png,jpg,jpeg,mp4,csv,txt,doc,docx',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id'
+            'tags.*' => 'exists:tags,id',
         ];
     }
 }

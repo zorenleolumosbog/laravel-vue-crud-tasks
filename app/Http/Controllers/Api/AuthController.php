@@ -6,39 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AuthController extends Controller
 {
     /**
      * Handle user login.
      *
-     * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(LoginRequest $request)
     {
         // First check if the user exists
         $user = User::where('email', $request->email)->first();
-        
-        if (!$user) {
+
+        if (! $user) {
             throw new HttpResponseException(
                 response()->json([
                     'message' => 'Email not found',
                     'errors' => [
-                        'email' => ['Email not found.']
-                    ]
+                        'email' => ['Email not found.'],
+                    ],
                 ], Response::HTTP_NOT_FOUND)
             );
 
         }
 
         // Check password
-        if (!Hash::check($request->password, $user->password)) {
+        if (! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'password' => ['The provided credentials are incorrect.'],
             ]);
@@ -50,14 +49,13 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
         ]);
     }
 
     /**
      * Handle user registration.
      *
-     * @param RegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(RegisterRequest $request)
@@ -65,7 +63,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => '',
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -73,14 +71,13 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
         ]);
     }
 
     /**
      * Handle user logout.
      *
-     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)

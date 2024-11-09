@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
@@ -24,12 +24,17 @@ class Task extends Model
     ];
 
     const statusIncompleted = 'incompleted';
+
     const statusCompleted = 'completed';
+
     const statusArchived = 'archived';
 
     const priorityUrgent = 'Urgent'; // 3
+
     const priorityHigh = 'High'; // 2
+
     const priorityNormal = 'Normal'; // 1
+
     const priorityLow = 'Low'; // 0
 
     public function user()
@@ -50,13 +55,13 @@ class Task extends Model
     public function scopeIncompleteStatus(Builder $query)
     {
         return $query->whereNull('completed_at')
-                    ->whereNull('archived_at');
+            ->whereNull('archived_at');
     }
 
     public function scopeCompleteStatus(Builder $query)
     {
         return $query->whereNotNull('completed_at')
-                    ->whereNull('archived_at');
+            ->whereNull('archived_at');
     }
 
     public function scopeArchiveStatus(Builder $query)
@@ -66,10 +71,10 @@ class Task extends Model
 
     public function scopeSearch(Builder $query, $search)
     {
-        return $query->where(function($query) use($search) {
-                    $query->where('title', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%");
-                });
+        return $query->where(function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        });
     }
 
     public function scopeFilter(Builder $query, array $filters)
@@ -82,7 +87,7 @@ class Task extends Model
             return $query->completeStatus();
         });
 
-        $query->when(data_get($filters, 'status') == self::statusArchived, function ($query,) {
+        $query->when(data_get($filters, 'status') == self::statusArchived, function ($query) {
             return $query->archiveStatus();
         });
 

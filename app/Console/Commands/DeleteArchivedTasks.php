@@ -27,7 +27,7 @@ class DeleteArchivedTasks extends Command
     public function handle()
     {
         $date = now()->subWeek();
-        
+
         Task::query()
             ->whereNotNull('archived_at')
             ->where('archived_at', '<=', $date)

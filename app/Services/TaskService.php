@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Tag;
 use App\Models\Task;
 
 class TaskService
@@ -12,7 +11,7 @@ class TaskService
      */
     public function __construct(
         private FileService $fileService
-    ){}
+    ) {}
 
     protected function getTaskPriorityOrder(array $data): array
     {
@@ -59,7 +58,7 @@ class TaskService
     {
         return tap($task)->update($this->getTaskPriorityOrder($data));
     }
-    
+
     public function updateTaskTags(Task $task, $request): void
     {
         if ($request->has('tags')) {
