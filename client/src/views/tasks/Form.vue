@@ -61,7 +61,7 @@
         
                 <div class="flex justify-end space-x-2 mt-6">
                     <button @click="closeTaskFormModal" type="button" class="px-4 py-1 text-red-500 border border-red-500 rounded">Cancel</button>
-                    <button type="submit" class="px-4 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Save</button>
+                    <button :disabled="!isEnableSubmitBtn" type="submit" class="px-4 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">Save</button>
                 </div>
             </form>
         </template>
@@ -76,6 +76,7 @@
     const props = defineProps(['selectedTask', 'allTags', 'errors']);
     const emit = defineEmits(['save-task', 'close-task-form-modal']);
     
+    const isEnableSubmitBtn = ref(true)
     const priorities = ref(['Urgent', 'High', 'Normal', 'Low']);
     const task = reactive({ 
                     title: '',
@@ -97,8 +98,9 @@
     };
     
     const submitForm = () => {
-        const formData = new FormData();
+        isEnableSubmitBtn.value = false;
 
+        const formData = new FormData();
         // Append files to formData
         task.attachments.forEach((file, index) => {
             formData.append(`attachments[${index}]`, file);
@@ -118,6 +120,8 @@
         } else {
             emit('save-task', formData)
         }
+
+        isEnableSubmitBtn.value = true;
     };
 
     const resetTaskInputs = () => {
