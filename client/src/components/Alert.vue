@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowAlertMessage" class="absolute top-4 right-4 gap-3 flex items-center p-4 rounded-lg bg-green-100 text-green-700 shadow-lg transition duration-500 transform opacity-100">
+    <div v-if="isShowAlertMessage" class="absolute top-4 right-4 gap-3 z-50 flex items-center p-4 rounded-lg bg-green-100 text-green-700 shadow-lg transition duration-500 transform opacity-100">
         <span class="flex-grow">
             <strong class="mr-1">Success!</strong>{{ alertMessage }}
         </span>
