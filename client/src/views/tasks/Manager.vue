@@ -115,7 +115,7 @@
             </div>
 
             <!-- Task Items -->
-            <div class="rounded-lg border border-gray-200 shadow-md overflow-x-auto max-w-full">
+            <div class="rounded-lg border border-gray-200 shadow-md max-w-full">
                 <table class="min-w-full border-collapse bg-white text-left text-sm text-gray-500">
                     <thead class="bg-gray-50">
                         <tr>
