@@ -2,65 +2,83 @@
     <Transition name="slide-fade">
         <Alert :isShowAlertMessage="isShowAlertMessage" :alertMessage="alertMessage" @close-alert="closeAlertMessage"></Alert>
     </Transition>
-    <div class="flex h-screen bg-gray-50">
-        <!-- Sidebar -->
-        <div class="w-64 p-4 bg-white border-r">
-            <div class="flex justify-between">
-                <h2 class="flex items-center gap-2 text-lg font-semibold mb-6">
-                    <span class="w-5 h-5 rounded flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-todo"><rect x="3" y="5" width="6" height="6" rx="1"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
-                    </span>
-                    Todo list
-                </h2>
-                <!-- Logout Button -->
-                <span @click="logout" class="pt-1 cursor-pointer" title="Logout">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                </span>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="space-y-1">
-                <span @click="applyFilterTaskStatus('incompleted')" class="flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg" :class="[taskStatus == 'incompleted' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50']">
-                    <div class="flex items-center gap-3">
-                    <span class="w-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/></svg>
-                    </span>
-                    <span>Todo</span>
-                    </div>
-                    <span class="px-2 rounded-full text-sm bg-blue-100">{{ taskStatuses?.incompleteCount }}</span>
-                </span>
-                <span @click="applyFilterTaskStatus('completed')" class="flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg" :class="[taskStatus == 'completed' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50']">
-                    <div class="flex items-center gap-3">
-                    <span class="w-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/></svg>
-                    </span>
-                    <span>Completed</span>
-                    </div>
-                    <span class="px-2 rounded-full text-sm bg-gray-100">{{ taskStatuses?.completeCount }}</span>
-                </span>
-                <span @click="applyFilterTaskStatus('archived')" class="flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg" :class="[taskStatus == 'archived' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50']">
-                    <div class="flex items-center gap-3">
-                    <span class="w-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
-                    </span>
-                    <span>Archive</span>
-                    </div>
-                    <span class="px-2 rounded-full text-sm bg-gray-100">{{ taskStatuses?.archiveCount }}</span>
-                </span>
-            </nav>
-
-            <!-- Add New Task Button -->
-            <button 
-                @click="createNewTask"
-                class="w-full mt-6 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700"
+    <div class="relative min-h-screen flex">
+        <!-- Mobile Toggle Button -->
+        <button
+            class="fixed top-4 left-4 z-50 p-2 rounded-md lg:hidden bg-white shadow-lg"
+            @click="toggleSidebar"
             >
-                <span>+</span>
-                Add New Task
-            </button>
+            <template v-if="isOpenSidebar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </template>
+            <template v-else>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-align-justify"><path d="M3 12h18"/><path d="M3 18h18"/><path d="M3 6h18"/></svg>
+            </template>
+        </button>
+        <!-- Sidebar -->
+        <div :class="[
+                'fixed lg:relative h-screen w-64 transform transition-transform duration-200 ease-in-out z-30 border-r bg-white',
+                isOpenSidebar ? 'translate-x-0 pt-14' : '-translate-x-full lg:translate-x-0'
+            ]">
+            <div class="w-64 p-4 border-r">
+                <div class="flex justify-between">
+                    <h2 class="flex items-center gap-2 text-lg font-semibold mb-6">
+                        <span class="w-5 h-5 rounded flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-todo"><rect x="3" y="5" width="6" height="6" rx="1"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
+                        </span>
+                        Todo list
+                    </h2>
+                    <!-- Logout Button -->
+                    <span @click="logout" class="pt-1 cursor-pointer" title="Logout">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                    </span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-1">
+                    <span @click="applyFilterTaskStatus('incompleted')" class="flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg" :class="[taskStatus == 'incompleted' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50']">
+                        <div class="flex items-center gap-3">
+                        <span class="w-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/></svg>
+                        </span>
+                        <span>Todo</span>
+                        </div>
+                        <span class="px-2 rounded-full text-sm bg-blue-100">{{ taskStatuses?.incompleteCount }}</span>
+                    </span>
+                    <span @click="applyFilterTaskStatus('completed')" class="flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg" :class="[taskStatus == 'completed' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50']">
+                        <div class="flex items-center gap-3">
+                        <span class="w-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/></svg>
+                        </span>
+                        <span>Completed</span>
+                        </div>
+                        <span class="px-2 rounded-full text-sm bg-gray-100">{{ taskStatuses?.completeCount }}</span>
+                    </span>
+                    <span @click="applyFilterTaskStatus('archived')" class="flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg" :class="[taskStatus == 'archived' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50']">
+                        <div class="flex items-center gap-3">
+                        <span class="w-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+                        </span>
+                        <span>Archive</span>
+                        </div>
+                        <span class="px-2 rounded-full text-sm bg-gray-100">{{ taskStatuses?.archiveCount }}</span>
+                    </span>
+                </nav>
+
+                <!-- Add New Task Button -->
+                <button 
+                    @click="createNewTask"
+                    class="w-full mt-6 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700"
+                >
+                    <span>+</span>
+                    Add New Task
+                </button>
+            </div>
         </div>
 
-        <div class="flex-1 p-6">
-            <div class="flex w-full flex-col gap-4 p-4 mb-6 sm:flex-row sm:items-center">
+        <!-- Main Task Manager -->
+        <div class="flex-1 w-full p-6 pt-16">
+            <div class="flex w-full flex-col gap-4 mb-6 sm:flex-row sm:items-center">
                 <!-- Search Box -->
                 <div class="relative">
                     <input
@@ -97,8 +115,8 @@
             </div>
 
             <!-- Task Items -->
-            <div class="rounded-lg border border-gray-200 shadow-md">
-                <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
+            <div class="rounded-lg border border-gray-200 shadow-md overflow-x-auto max-w-full">
+                <table class="min-w-full border-collapse bg-white text-left text-sm text-gray-500">
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-4 font-medium text-gray-900">Title</th>
@@ -325,6 +343,11 @@
         { debounce: 500, maxWait: 1000 },
     )
 
+    const isOpenSidebar = ref(false)
+    const toggleSidebar = () => {
+        isOpenSidebar.value = !isOpenSidebar.value
+    }
+
     const setPageNumber = (url) => {
         if(url) {
             const urlParams = new URL(url).searchParams;
@@ -338,6 +361,10 @@
         try {
             const response = await fetchTasks()
             tasks.value = response.data
+
+            if(isOpenSidebar.value) {
+                toggleSidebar()
+            }
         } catch (error) {
             alert(`Failed to fetch tasks: ${error}`)
         }
