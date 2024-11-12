@@ -71,7 +71,7 @@ php artisan schedule:work
 
 1. **Install frontend dependencies and run locally**:
 ```
-cd project-folder/client
+cd project-folder/client-vue
 ```
 
 3. **Setup the environment**:
